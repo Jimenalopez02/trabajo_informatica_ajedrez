@@ -27,14 +27,14 @@ const int ColorNegras = 1;
 class Pieza {
 protected:
     int color;                  // ColorBlancas o ColorNegras
-    int fila, columna;          // Posición lógica en el tablero
+    int fila, columna;          // Posición en el tablero
     Coordenada posicion;        // Posición gráfica para ETSIDI
-    SpriteSequence sprite;      // Animación/imagen de la pieza
+    SpriteSequence sprite;      // imagen pieza
 
 public:
     bool seleccionActivada = false;
 
-    // Constructor base
+    // Constructor 
     Pieza(int color, const Coordenada& posicion, const char* rutaSprite, float escala = 1.0f);
 
     virtual ~Pieza();
@@ -46,7 +46,7 @@ public:
     virtual TipoPieza getTipo() const = 0;
     virtual vector<Casilla> getMovimientosPermitidos(int filaActual, int columnaActual, bool turnoBlancas) const = 0;
 
-    // Accesores y mutadores
+    
     int getColor() const;
     int getFila() const;
     int getColumna() const;

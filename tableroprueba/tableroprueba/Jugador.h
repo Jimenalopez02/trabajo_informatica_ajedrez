@@ -2,14 +2,14 @@
 #include <string>
 #include <vector>
 
-class Pieza;  // Declaración adelantada para evitar inclusión circular
+class Pieza;  
 
 class Jugador {
 private:
     std::string nombre;
     bool turno = false;
     bool esMaquina = false;
-    std::vector<Pieza*> piezas;  // Relación directa con tus objetos Pieza
+    std::vector<Pieza*> piezas;  // Relación directa con  objetos Pieza
 
 public:
     // Constructor

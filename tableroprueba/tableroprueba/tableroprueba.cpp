@@ -1,5 +1,6 @@
 #include "freeglut.h"
 #include "ETSIDI.h"
+#include <random>
 #include <iostream>
 #include <vector>
 #include "tablero.h"
@@ -324,79 +325,82 @@ std::string Tablero::tipoPiezaToString(TipoPieza tipo) {
     default: return "Desconocido";
     }
 }
-void Tablero::realizarMovimientoMaquina() {
-    if (jugador2.EsMaquina() && jugador2.getTurno()) {
-        std::vector<std::pair<Pieza*, Casilla>> movimientosPosibles;
+#include <random> // Asegúrate de tener esto al principio del archivo
 
-        for (int fila = 0; fila < FILAS_TABLERO; fila++) {
-            for (int col = 0; col < COLUMNAS_TABLERO; col++) {
-                Pieza* p = casillas[fila][col];
-                if (p && p->getColor() == ColorNegras) {
-                    auto movs = p->getMovimientosPermitidos(fila, col, false);
-                    for (const auto& m : movs) {
-                        movimientosPosibles.emplace_back(p, m);
+void Tablero::realizarMovimientoMaquina() {
+    if (!jugador2.EsMaquina() || !jugador2.getTurno()) return;
+
+    std::vector<std::pair<Pieza*, Casilla>> movimientos;
+    std::vector<std::pair<Pieza*, Casilla>> capturas;
+
+    // Reunir todos los movimientos posibles de piezas negras
+    for (int fila = 0; fila < FILAS_TABLERO; fila++) {
+        for (int col = 0; col < COLUMNAS_TABLERO; col++) {
+            Pieza* pieza = casillas[fila][col];
+            if (pieza && pieza->getColor() == ColorNegras) {
+                auto posibles = pieza->getMovimientosPermitidos(fila, col, false);
+                for (const Casilla& destino : posibles) {
+                    movimientos.emplace_back(pieza, destino);
+
+                    Pieza* objetivo = casillas[destino.fila][destino.columna];
+                    if (objetivo && objetivo->getColor() == ColorBlancas) {
+                        capturas.emplace_back(pieza, destino);
                     }
                 }
             }
         }
-
-        if (movimientosPosibles.empty()) {
-            std::cout << "La máquina no puede mover.\n";
-            return;
-        }
-
-        std::pair<Pieza*, Casilla> elegido;
-        if (nivelDificultad == 0) {
-            std::random_shuffle(movimientosPosibles.begin(), movimientosPosibles.end());
-            elegido = movimientosPosibles.front();
-        }
-        else {
-            std::vector<std::pair<Pieza*, Casilla>> capturas;
-            for (const auto& mov : movimientosPosibles) {
-                if (casillas[mov.second.fila][mov.second.columna] &&
-                    casillas[mov.second.fila][mov.second.columna]->getColor() == ColorBlancas) {
-                    capturas.push_back(mov);
-                }
-            }
-            if (!capturas.empty()) {
-                std::random_shuffle(capturas.begin(), capturas.end());
-                elegido = capturas.front();
-            }
-            else {
-                std::random_shuffle(movimientosPosibles.begin(), movimientosPosibles.end());
-                elegido = movimientosPosibles.front();
-            }
-        }
-
-        Pieza* pieza = elegido.first;
-        Casilla destino = elegido.second;
-        int filaOrigen = pieza->getFila();
-        int colOrigen = pieza->getColumna();
-
-        if (casillas[destino.fila][destino.columna]) {
-            delete casillas[destino.fila][destino.columna];
-        }
-
-        casillas[filaOrigen][colOrigen] = nullptr;
-        casillas[destino.fila][destino.columna] = pieza;
-
-        pieza->setFila(destino.fila);
-        pieza->setColumna(destino.columna);
-        pieza->setPosicion(coordenadaSobreTablero[destino.fila * COLUMNAS_TABLERO + destino.columna]);
-
-        std::cout << "Máquina movió (" << colOrigen << ", " << filaOrigen
-            << ") → (" << destino.columna << ", " << destino.fila << ")\n";
-
-        // Coronación automática
-        if (pieza->getTipo() == TipoPieza::Peon && destino.fila == FILAS_TABLERO - 1) {
-            delete pieza;
-            pieza = new Reina(coordenadaSobreTablero[destino.fila * COLUMNAS_TABLERO + destino.columna],
-                ColorNegras, destino.fila, destino.columna, *this);
-            casillas[destino.fila][destino.columna] = pieza;
-            std::cout << "Peón coronado automáticamente a Reina.\n";
-        }
-
-        jugador2.SetTurno(false);
-        jugador1.SetTurno(true);
     }
+
+    if (movimientos.empty()) {
+        std::cout << "La máquina no puede mover.\n";
+        return;
+    }
+
+    // Generador de números aleatorios
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::pair<Pieza*, Casilla> elegido;
+
+    if (nivelDificultad == 0 || capturas.empty()) {
+        std::shuffle(movimientos.begin(), movimientos.end(), gen);
+        elegido = movimientos.front();
+    }
+    else {
+        std::shuffle(capturas.begin(), capturas.end(), gen);
+        elegido = capturas.front();
+    }
+
+    // Ejecutar movimiento
+    Pieza* pieza = elegido.first;
+    Casilla destino = elegido.second;
+
+    int filaOrigen = pieza->getFila();
+    int colOrigen = pieza->getColumna();
+
+    delete casillas[destino.fila][destino.columna]; // eliminar si hay pieza rival
+
+    casillas[filaOrigen][colOrigen] = nullptr;
+    casillas[destino.fila][destino.columna] = pieza;
+
+    pieza->setFila(destino.fila);
+    pieza->setColumna(destino.columna);
+    pieza->setPosicion(coordenadaSobreTablero[destino.fila * COLUMNAS_TABLERO + destino.columna]);
+
+    std::cout << "Máquina movió (" << colOrigen << ", " << filaOrigen
+        << ") → (" << destino.columna << ", " << destino.fila << ")\n";
+
+    // Coronación automática a reina
+    if (pieza->getTipo() == TipoPieza::Peon && destino.fila == FILAS_TABLERO - 1) {
+        delete pieza;
+        pieza = new Reina(coordenadaSobreTablero[destino.fila * COLUMNAS_TABLERO + destino.columna],
+            ColorNegras, destino.fila, destino.columna, *this);
+        casillas[destino.fila][destino.columna] = pieza;
+        std::cout << "Peón coronado automáticamente a Reina.\n";
+    }
+
+    jugador2.SetTurno(false);
+    jugador1.SetTurno(true);
 }
+
+

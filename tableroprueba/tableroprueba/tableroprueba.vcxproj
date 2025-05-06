@@ -88,6 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>"C:\trabajo_ajedrez\tableroprueba\lib"</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +145,8 @@
   <ItemGroup>
     <ClInclude Include="casilla.h" />
     <ClInclude Include="Coordenada.h" />
+    <ClInclude Include="Jugador.h" />
+    <ClInclude Include="pieza.h" />
     <ClInclude Include="tablero.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

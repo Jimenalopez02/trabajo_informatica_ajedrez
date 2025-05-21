@@ -4,7 +4,7 @@
 
 
 // Constructor
-Menu::Menu() : selectedMode(-1), isActive(true) {}
+Menu::Menu() : selectedMode(0), isActive(true) {}
 
 // Agregar un ítem al menú
 void Menu::AddItem(const std::string& label, int mode) {
@@ -99,6 +99,14 @@ void Menu::Draw() {
 void Menu::HandleMouseClick(int x, int y) {
     // Convertir la posición del mouse a coordenadas del menú y verificar si el click está sobre algún botón
     // Aquí se implementaría la lógica para seleccionar un ítem del menú
+    for (size_t i = 0; i < items.size(); ++i) {
+        const auto& item = items[i];
+        if (x >= item.x * 800 && x <= (item.x + item.width) * 800 &&
+            y >= item.y * 600 && y <= (item.y - item.height) * 600) {
+            selectedMode = item.mode;
+            std::cout << "Opción seleccionada: " << item.label << std::endl;
+        }
+    }
 }
 
 // Obtener el modo seleccionado
@@ -119,4 +127,17 @@ void Menu::Deactivate() {
 // Activar el menú
 void Menu::Activate() {
     isActive = true;
+}
+    // Manejo de teclado (navegar por el menú)
+    void Menu::HandleKeyboardInput(unsigned char key) {
+        if (key == 27) {  // 'Esc' para salir
+            exit(0);
+        }
+        // Si se presiona 'Arriba' o 'Abajo', se cambia la opción seleccionada
+        if (key == 'w' || key == 'W') {
+            selectedMode = (selectedMode - 1 + items.size()) % items.size();
+        }
+        if (key == 's' || key == 'S') {
+            selectedMode = (selectedMode + 1) % items.size();
+        }
 }

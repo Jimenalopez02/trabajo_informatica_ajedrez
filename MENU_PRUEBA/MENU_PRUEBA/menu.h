@@ -40,4 +40,7 @@ public:
 
     // Activar el menú
     void Activate();
+
+    // Manejo de teclado (navegar por el menú)
+    void HandleKeyboardInput(unsigned char key);
 };

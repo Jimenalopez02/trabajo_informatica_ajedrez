@@ -1,0 +1,5 @@
+﻿  MENU_PRUEBA.cpp
+  menu.cpp
+C:\Users\Iker\Desktop\TERCERO\2ªCuatri\Informática Industrial Y Comunicaciones\TRABAJO\MENU_PRUEBA\MENU_PRUEBA\menu.cpp(138,62): warning C4267: '=': conversión de 'size_t' a 'int'; posible pérdida de datos
+  Generando código...
+  MENU_PRUEBA.vcxproj -> C:\Users\Iker\Desktop\TERCERO\2ªCuatri\Informática Industrial Y Comunicaciones\TRABAJO\MENU_PRUEBA\x64\Debug\MENU_PRUEBA.exe

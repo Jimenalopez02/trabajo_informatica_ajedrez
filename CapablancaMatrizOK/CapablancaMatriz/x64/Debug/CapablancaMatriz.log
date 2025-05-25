@@ -1,0 +1,37 @@
+﻿  Grafica.cpp
+  Juego.cpp
+C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\Juego.cpp(27,17): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\Juego.cpp(28,17): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+  prueba.cpp
+  Alfil.cpp
+  Arzobispo.cpp
+  Caballo.cpp
+  Canciller.cpp
+  Peon.cpp
+  Reina.cpp
+  Rey.cpp
+  Tablero.cpp
+C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\src\Tablero.cpp(95,25): warning C4244: 'inicializando': conversión de 'const double' a 'float'; posible pérdida de datos
+C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\src\Tablero.cpp(96,25): warning C4244: 'inicializando': conversión de 'const double' a 'float'; posible pérdida de datos
+  Torre.cpp
+  Generando código...
+  CapablancaMatriz.vcxproj -> C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\x64\Debug\CapablancaMatriz.exe
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\alfil_blanco.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\alfil_negro.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\arzobispo_blanco.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\arzobispo_negro.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\caballo_blanco.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\caballo_negro.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\canciller_blanco.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\canciller_negro.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\peon_blanco.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\peon_negro.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\reina_blanca.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\reina_negra.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\rey_blanco.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\rey_negro.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\Selector.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\Tablero_etsidi.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\torre_blanca.png
+  C:\Users\jimen\OneDrive\Desktop\ALFIL\CapablancaMatrizFUNCIONA\CapablancaMatrizFUNCIONA\bin\\imagenes\torre_negra.png
+  18 archivo(s) copiado(s)

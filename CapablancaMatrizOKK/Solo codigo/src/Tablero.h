@@ -27,7 +27,7 @@ public:
     void inicializaTablero();
     void dibujar() const;
 
-    Pieza* getPieza(int fila, int columna);
+    Pieza* getPieza(int fila, int columna)const;
     bool casillaOcupada(int fila, int columna) const;
     bool hayPiezaOponente(int fila, int columna, bool turnoBlancas) const;
     std::vector<Casilla> obtenerMovimientosPermitidos(int fila, int columna, bool turnoBlancas) const;

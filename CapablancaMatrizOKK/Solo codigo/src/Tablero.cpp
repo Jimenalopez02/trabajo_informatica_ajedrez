@@ -145,7 +145,7 @@ void Tablero::dibujar() const {
     }
 }
 
-Pieza* Tablero::getPieza(int fila, int columna) {
+Pieza* Tablero::getPieza(int fila, int columna)const  {
     if (fila < 0 || fila >= FILAS_TABLERO || columna < 0 || columna >= COLUMNAS_TABLERO)
         return nullptr;
     return casillas[fila][columna];
@@ -233,7 +233,6 @@ bool Tablero::estaEnJaque(const Jugador& jugador, const Jugador& oponente) {
     return false; // Rey no está en jaque
 }
 bool Tablero::esMovimientoLegal(const Casilla& origen, const Casilla& destino, Jugador& jugador, Jugador& oponente) {
-    // Guardamos punteros para restaurar después si es necesario
     Pieza* piezaOrigen = casillas[origen.fila][origen.columna];
     Pieza* piezaDestino = casillas[destino.fila][destino.columna];
 
@@ -249,33 +248,40 @@ bool Tablero::esMovimientoLegal(const Casilla& origen, const Casilla& destino, J
     piezaOrigen->setFila(destino.fila);
     piezaOrigen->setColumna(destino.columna);
 
-    // Quitar temporalmente la pieza enemiga del vector (si hay)
+    // Eliminar temporalmente pieza capturada, sin importar si es aliada o enemiga
+    std::vector<Pieza*>* vectorPiezas = nullptr;
     bool piezaCapturada = false;
+
     if (piezaDestino) {
-        auto& piezasOponente = oponente.getPiezas();
-        auto it = std::find(piezasOponente.begin(), piezasOponente.end(), piezaDestino);
-        if (it != piezasOponente.end()) {
-            piezasOponente.erase(it);
+        if (piezaDestino->getColor() == jugador.getColor()) {
+            vectorPiezas = &jugador.getPiezas();
+        }
+        else {
+            vectorPiezas = &oponente.getPiezas();
+        }
+
+        auto it = std::find(vectorPiezas->begin(), vectorPiezas->end(), piezaDestino);
+        if (it != vectorPiezas->end()) {
+            vectorPiezas->erase(it);
             piezaCapturada = true;
         }
     }
 
-    // Verificamos si el rey del jugador queda en jaque
+    // Evaluar si el rey está en jaque
     bool enJaque = estaEnJaque(jugador, oponente);
 
-    // Deshacer el movimiento
+    // Revertir el movimiento
     casillas[origen.fila][origen.columna] = piezaOrigen;
     casillas[destino.fila][destino.columna] = piezaDestino;
-
     piezaOrigen->setFila(filaOriginal);
     piezaOrigen->setColumna(colOriginal);
 
-    // Restaurar la pieza capturada
-    if (piezaCapturada) {
-        oponente.agregarPieza(piezaDestino);
+    // Restaurar pieza capturada si existía
+    if (piezaCapturada && vectorPiezas) {
+        vectorPiezas->push_back(piezaDestino);
     }
 
-    return !enJaque;  // Movimiento legal si no deja al rey en jaque
+    return !enJaque;
 }
 void Tablero::eliminarPiezaDeJugador(Pieza* pieza) {
     Jugador* dueño = pieza->getColor() == ColorBlancas ? &jugador1 : &jugador2;

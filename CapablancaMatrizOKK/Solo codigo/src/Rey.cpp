@@ -13,7 +13,7 @@ TipoPieza Rey::getTipo() const {
 std::vector<Casilla> Rey::getMovimientosPermitidos(int filaActual, int columnaActual, bool turnoBlancas) const {
     std::vector<Casilla> movimientos;
 
-    // Todas las direcciones posibles (8 movimientos)
+    // Direcciones posibles (8 alrededor)
     int direcciones[8][2] = {
         {-1, -1}, {-1, 0}, {-1, 1},
         { 0, -1},          { 0, 1},
@@ -24,8 +24,11 @@ std::vector<Casilla> Rey::getMovimientosPermitidos(int filaActual, int columnaAc
         int fila = filaActual + dir[0];
         int col = columnaActual + dir[1];
 
-        if (fila >= 0 && fila < 8 && col >= 0 && col < 10) {
-            if (!tablero.casillaOcupada(fila, col)) {
+        if (fila >= 0 && fila < FILAS_TABLERO && col >= 0 && col < COLUMNAS_TABLERO) {
+            Pieza* destino = tablero.getPieza(fila, col);
+
+            // Si la casilla está vacía o tiene una pieza (propia o enemiga) distinta del propio rey
+            if (!destino || destino->getTipo() != TipoPieza::Rey || destino->getColor() != color) {
                 movimientos.push_back({ fila, col });
             }
         }

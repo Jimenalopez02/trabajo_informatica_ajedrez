@@ -1,8 +1,0 @@
-﻿  prueba.cpp
-  Jugador.cpp
-  Peon.cpp
-  Pieza.cpp
-  Tablero.cpp
-C:\Users\artuc\Desktop\CapablancaMatriz\src\Tablero.cpp(506,52): warning C4805: '!=': combinación no segura del tipo 'int' y el tipo 'bool' en la operación
-  Generando código...
-  CapablancaMatriz.vcxproj -> C:\Users\artuc\Desktop\CapablancaMatriz\x64\Debug\CapablancaMatriz.exe

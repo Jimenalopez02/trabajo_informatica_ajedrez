@@ -1,6 +1,8 @@
 #include "Juego.h"
 #include "freeglut.h"
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 Juego::Juego()
     : jugador1("Blancas", false, ColorBlancas),
@@ -9,6 +11,7 @@ Juego::Juego()
     turnoBlancas(true),
     haySeleccion(false),
     casillaOrigen({ -1, -1 }) {
+    iniciarTurno();
 }
 
 void Juego::dibujar() const {
@@ -41,6 +44,8 @@ void Juego::dibujar() const {
 }
 
 void Juego::manejarClick(int x, int y) {
+    if (!turnoBlancas) return; // Ignorar clics si es turno del bot
+
     int fila = (1000 - y - MARGEN_Y) / TAM_CASILLA;
     int columna = (x - MARGEN_X) / TAM_CASILLA;
 
@@ -80,7 +85,6 @@ void Juego::manejarClick(int x, int y) {
                 return;
             }
             tablero.moverPieza(casillaOrigen, destino);
-            // Verifica si el rey enemigo está en jaque
             bool enJaque = turnoBlancas
                 ? tablero.estaEnJaque(jugador2, jugador1)
                 : tablero.estaEnJaque(jugador1, jugador2);
@@ -90,7 +94,7 @@ void Juego::manejarClick(int x, int y) {
             }
 
             turnoBlancas = !turnoBlancas;
-            std::cout << "Movimiento válido\n";
+            iniciarTurno(); // Reiniciar temporizador
         }
         else if (valido) {
             std::cout << "Ese movimiento dejaría a tu rey en jaque. No permitido.\n";
@@ -113,3 +117,76 @@ void Juego::redimensionar(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void Juego::iniciarTurno() {
+    tiempoInicioTurno = std::chrono::steady_clock::now();
+}
+
+bool Juego::tiempoAgotado() {
+    auto ahora = std::chrono::steady_clock::now();
+    int transcurrido = std::chrono::duration_cast<std::chrono::seconds>(ahora - tiempoInicioTurno).count();
+    return transcurrido >= TIEMPO_MAXIMO_SEGUNDOS;
+}
+
+bool Juego::esBotTurno() const {
+    return !turnoBlancas;
+}
+
+void Juego::actualizar() {
+    if (tiempoAgotado()) {
+        std::cout << "¡Tiempo agotado!\n";
+        turnoBlancas = !turnoBlancas;
+        iniciarTurno();
+    }
+
+    if (esBotTurno()) {
+        moverBot();
+    }
+}
+
+std::vector<Movimiento> Juego::obtenerMovimientosBot() {
+    std::vector<Movimiento> movimientos;
+
+    for (int fila = 0; fila < FILAS_TABLERO; ++fila) {
+        for (int col = 0; col < COLUMNAS_TABLERO; ++col) {
+            Pieza* p = tablero.getPieza(fila, col);
+            if (p && p->getColor() == jugador2.getColor()) {
+                std::vector<Casilla> destinos = tablero.obtenerMovimientosPermitidos(fila, col, false);
+                for (const Casilla& destino : destinos) {
+                    Movimiento mov;
+                    mov.desdeFila = fila;
+                    mov.desdeColumna = col;
+                    mov.hastaFila = destino.fila;
+                    mov.hastaColumna = destino.columna;
+                    movimientos.push_back(mov);
+                }
+            }
+        }
+    }
+
+    return movimientos;
+}
+
+void Juego::moverBot() {
+    std::vector<Movimiento> movimientos = obtenerMovimientosBot();
+    if (movimientos.empty()) {
+        std::cout << "El bot no tiene movimientos\n";
+        return;
+    }
+
+    std::srand(std::time(nullptr));
+    Movimiento elegido = movimientos[std::rand() % movimientos.size()];
+    Casilla origen = { elegido.desdeFila, elegido.desdeColumna };
+    Casilla destino = { elegido.hastaFila, elegido.hastaColumna };
+
+    tablero.moverPieza(origen, destino);
+    std::cout << "Bot movió de (" << origen.fila << ", " << origen.columna << ") a ("
+        << destino.fila << ", " << destino.columna << ")\n";
+
+    if (tablero.estaEnJaque(jugador1, jugador2)) {
+        std::cout << "¡Rey humano en jaque!\n";
+    }
+
+    turnoBlancas = true;
+    iniciarTurno();
+    glutPostRedisplay();
+}

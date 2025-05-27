@@ -5,6 +5,7 @@
 Juego juego;
 
 void OnDraw() {
+    juego.actualizar();  // Lógica de reloj y bot
     juego.dibujar();
 }
 
